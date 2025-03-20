@@ -26,4 +26,10 @@ spring:
 server:
   ssl:
     bundle: web
+  servlet:
+    session:
+      cookie:
+        same-site: strict
+        http-only: true
+        secure: true
   port: 8443
