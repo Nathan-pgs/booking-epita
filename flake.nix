@@ -31,6 +31,7 @@
             gradle
             jdk
             maven
+            mkcert
             ncurses
             patchelf
             spring-boot-cli
