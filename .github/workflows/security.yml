@@ -1,0 +1,43 @@
+name: Daily Security Pipeline
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Tous les jours à 02:00 UTC
+  workflow_dispatch:     # Déclenchement manuel
+
+jobs:
+  DependenciesAnalysis:
+    name: Dependency Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run OSV Scanner in app/
+        uses: google/osv-scanner-action@v1
+        with:
+          scan-args: >-
+            --recursive app/
+
+      - name: Upload OSV SARIF report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.sarif  # Assurez-vous que l’OSV Scanner génère bien ce fichier dans ce chemin
+
+  SourceCodeAnalysis:
+    name: Source Code Analysis
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep with java rules on app/
+        run: semgrep --config=p/java --sarif --output=semgrep.sarif app/
+
+      - name: Upload Semgrep SARIF report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: semgrep.sarif
