@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Semgrep analysis
-        run: semgrep scan --config=p/java --sarif -o semgrep-results.sarif
+        run: semgrep scan --config=p/java --sarif -o semgrep-results.sarif ./app
 
       - name: Upload Semgrep report
         uses: github/codeql-action/upload-sarif@v3
