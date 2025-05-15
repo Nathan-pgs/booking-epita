@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run OSV Scanner in app/
-        uses: google/osv-scanner-action@v1
+        uses: google/osv-scanner-action@v2
         with:
           scan-args: >-
             --recursive app/
